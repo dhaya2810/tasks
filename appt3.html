@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stopwatch</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    .stopwatch-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .time {
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+
+    .buttons button {
+      padding: 12px 20px;
+      font-size: 1em;
+      margin: 0 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .start {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .pause {
+      background-color: #ffc107;
+      color: white;
+    }
+
+    .reset {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .buttons button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="stopwatch-container">
+    <h1>🕒 Stopwatch</h1>
+    <div class="time" id="display">00:00:000</div>
+    <div class="buttons">
+      <button class="start" onclick="startTimer()">Start</button>
+      <button class="pause" onclick="pauseTimer()">Pause</button>
+      <button class="reset" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let startTime, interval;
+    let running = false;
+    let elapsed = 0;
+
+    function updateDisplay() {
+      const now = Date.now();
+      const diff = now - startTime + elapsed;
+
+      const minutes = String(Math.floor(diff / 60000)).padStart(2, '0');
+      const seconds = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+      const milliseconds = String(diff % 1000).padStart(3, '0');
+
+      document.getElementById('display').textContent = `${minutes}:${seconds}:${milliseconds}`;
+    }
+
+    function startTimer() {
+      if (!running) {
+        startTime = Date.now();
+        interval = setInterval(updateDisplay, 10);
+        running = true;
+      }
+    }
+
+    function pauseTimer() {
+      if (running) {
+        clearInterval(interval);
+        elapsed += Date.now() - startTime;
+        running = false;
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(interval);
+      running = false;
+      elapsed = 0;
+      document.getElementById('display').textContent = '00:00:000';
+    }
+  </script>
+</body>
+</html>
